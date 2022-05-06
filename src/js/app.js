@@ -11,9 +11,17 @@ App = {
 
   initWeb3: function(){ 
       //Get web3 instance from MetaMask wallet
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider)
-      return App.initContract();
+      if (typeof web3 !== 'undefined') {
+        //If instance already provided by MetaMask
+        App.web3Provider = web3.currentProvider;
+        ethereum.enable();
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        //Return to default
+        App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+        web3 = new Web3(App.web3Provider);
+      }
+     return App.initContract();
   },
 
   initContract: function() {
